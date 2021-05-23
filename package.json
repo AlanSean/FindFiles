@@ -3,7 +3,10 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "build": "tsc -p tsconfig.types.json"
+    "build": "npm-run-all build:esm5 build:types",
+    "build:esm5": "tsc -p ./src/tsconfig.json",
+    "build:types": "tsc -p ./src/tsconfig.types.json",
+    "test": "npm run  build && node ./test/index.js"
   },
   "author": "",
   "main": "./index.js",
@@ -21,6 +24,7 @@
     "@typescript-eslint/eslint-plugin": "4.24.0",
     "@typescript-eslint/eslint-plugin-tslint": "4.24.0",
     "@typescript-eslint/parser": "4.24.0",
+    "npm-run-all": "^4.1.5",
     "tslib": "2.2.0",
     "typescript": "4.1.5"
   }

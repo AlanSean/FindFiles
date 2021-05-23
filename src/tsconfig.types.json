@@ -2,12 +2,12 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "composite": true,
-    "module": "es2015",
+    "module": "esnext",
     "target": "esnext",
     "removeComments": false,
     "declaration": true,
     "declarationMap": true,
-    "declarationDir": "./types",
+    "declarationDir": "../types",
     "emitDeclarationOnly": true
   }
 }
