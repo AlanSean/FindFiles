@@ -13,8 +13,13 @@
   "module": "./_esm5/index.js",
   "license": "ISC",
   "dependencies": {
+    "-": "0.0.1",
+    "@types/ramda": "0.27.40",
+    "D": "1.0.0",
     "crypto-js": "4.0.0",
     "fs-extra": "10.0.0",
+    "lodash": "4.17.21",
+    "ramda": "0.27.1",
     "rxjs": "7.1.0"
   },
   "devDependencies": {

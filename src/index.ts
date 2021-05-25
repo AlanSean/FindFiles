@@ -6,68 +6,78 @@ import { isFile, fileCheck, isDirectory } from './check';
 
 // const subject = new Subject();
 
-export class FindFiles {
+export class FindFiles<T = string> {
   condition?: RegExp;
-  factorys: UnaryFunction<string, any>[] = [];
-  check: UnaryFunction<undefined | string, boolean>;
+  factorys: UnaryFunction<string, T>[] = [];
+  check: UnaryFunction<string, undefined | string>;
   constructor(condition?: RegExp) {
     this.check = fileCheck(condition);
   }
 
-  static create(factorys: UnaryFunction<string, any>[]) {
-    const findFiles = new AnonymousFiles();
+  static create<S = string>(factorys: UnaryFunction<string, S>[]) {
+    const findFiles = new AnonymousFiles<S>();
     findFiles.factorys = factorys;
     return findFiles;
   }
 
-  pipe<T>(...operations: UnaryFunction<string, T>[]) {
-    return FindFiles.create(operations);
+  pipe<R>(...operations: UnaryFunction<string, R>[]) {
+    return FindFiles.create<R>(operations);
   }
 
-  find<T>(dirPath: string | string[]) {
-    return new AnonymousFiles().find<T>(dirPath);
+  find(dirPath: string | string[]) {
+    return new AnonymousFiles<T>().find(dirPath);
   }
 }
 
-class AnonymousFiles extends FindFiles {
-  protected arr = [];
+class AnonymousFiles<T = string> extends FindFiles<T> {
+  protected arr: T[] = [];
   constructor() {
     super();
   }
-  protected recursive<T>(fileName: string) {
-    if (!fs.existsSync(fileName)) return;
+  protected recursive(fileName?: string) {
+    if (!fileName || !fs.existsSync(fileName)) return;
+
     const { check } = this;
-    isFile(fileName) && check(fileName) && this.add<T>(fileName);
+
+    this.next(check(fileName));
+
     if (isDirectory(fileName)) {
+
       const files = fs.readdirSync(fileName);
+
       for (let val of files) {
+
         const filepath = path.resolve(fileName, val).replace(/\\/, '/');
-        isFile(filepath) && check(filepath) && this.add<T>(filepath);
-        isDirectory(filepath) && this.recursive(filepath);
+        this.next(check(filepath));
+        this.recursive(isDirectory(filepath));
+        
       }
     }
   }
 
-  protected factory<T>(fileName: string): T {
+  protected factory(fileName: string): T {
     const factorys = [...this.factorys];
-    this.factorys = [];
     return pipeFromArray<string, T>(factorys)(fileName);
   }
+  subscribe(){
 
-  add<T>(fileName: string) {
-    const arr = this.arr as T[];
-    arr[arr.length] = this.factory<T>(fileName);
   }
-  find<T>(dirPath: string | string[]) {
+  next(fileName?: string) {
+    if(!fileName) return;
+    const arr = this.arr;
+    arr[arr.length] = this.factory(fileName);
+  }
+
+  find(dirPath: string | string[]) {
     if (Object.prototype.toString.call(dirPath) === '[object Array]') {
       for (let path of dirPath) {
-        this.recursive<T>(path);
+        this.recursive(path);
       }
     }
     if (typeof dirPath === 'string') {
-      this.recursive<T>(dirPath);
+      this.recursive(dirPath);
     }
 
-    return this.arr as T[];
+    return this.arr;
   }
 }
