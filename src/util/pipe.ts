@@ -1,4 +1,4 @@
-import { UnaryFunction } from "types";
+import { UnaryFunction } from "../types";
 import { identity } from "./identity";
 export function pipe(){
   
