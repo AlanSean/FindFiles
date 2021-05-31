@@ -3,33 +3,37 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "build": "npm-run-all build:esm5 build:types",
-    "build:esm5": "tsc -p ./src/tsconfig.json",
-    "build:types": "tsc -p ./src/tsconfig.types.json",
-    "test": "npm run  build && node ./test/index.js"
+    "dev": "gulp --dist ./dist/",
+    "build": "gulp build --dist node_modules/findFile",
+    "clean": "gulp clean:bundle",
+    "test": "npm run build && node ./test/index.js"
   },
-  "author": "",
+  "author": "AlanSean",
   "main": "./index.js",
   "module": "./_esm5/index.js",
   "license": "ISC",
   "dependencies": {
-    "-": "0.0.1",
     "@types/ramda": "0.27.40",
-    "D": "1.0.0",
     "crypto-js": "4.0.0",
     "fs-extra": "10.0.0",
-    "lodash": "4.17.21",
-    "ramda": "0.27.1",
-    "rxjs": "7.1.0"
+    "ramda": "0.27.1"
   },
   "devDependencies": {
     "@types/crypto-js": "4.0.1",
     "@types/fs-extra": "9.0.11",
+    "@types/gulp": "4.0.8",
     "@types/node": "15.6.0",
     "@typescript-eslint/eslint-plugin": "4.24.0",
     "@typescript-eslint/eslint-plugin-tslint": "4.24.0",
     "@typescript-eslint/parser": "4.24.0",
+    "delete-empty": "3.0.0",
+    "gulp": "4.0.2",
+    "gulp-clean": "0.4.0",
+    "gulp-cli": "2.3.0",
+    "gulp-sourcemaps": "3.0.0",
+    "gulp-typescript": "6.0.0-alpha.1",
     "npm-run-all": "^4.1.5",
+    "ts-node": "10.0.0",
     "tslib": "2.2.0",
     "typescript": "4.1.5"
   }

@@ -8,6 +8,7 @@ export function isDirectory(fileName: string) {
 export function isFile(fileName: string) {
   if (fs.existsSync(fileName) && fs.statSync(fileName).isFile()) return fileName;
   return undefined;
+  
 }
 export function check(fileName?: string, condition?: RegExp) {
   const result = condition == undefined || fileName == undefined ||  condition.test(fileName);

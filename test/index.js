@@ -1,5 +1,5 @@
 const path = require("path");
-const { FindFiles }  = require('../_esm5/index.js');
+const { FindFiles }  = require('findFile');
 
 const findFiles = new FindFiles(/\.(jpg|jpeg|webp|png)$/i);
 
