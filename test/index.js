@@ -14,3 +14,5 @@ console.log('filesPipe', filesPipe, path.resolve('./img'))
 const files = findFiles.find(path.resolve(__dirname,'./img'));
 
 console.log('files', files, path.resolve(__dirname, './img'))
+
+console.log(345)

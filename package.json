@@ -3,14 +3,14 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "dev": "gulp --dist ./dist/",
+    "dev": "webpack",
+    "build:watch": "gulp --dist node_modules/findFile",
     "build": "gulp build --dist node_modules/findFile",
     "clean": "gulp clean:bundle",
     "test": "npm run build && node ./test/index.js"
   },
   "author": "AlanSean",
   "main": "./index.js",
-  "module": "./_esm5/index.js",
   "license": "ISC",
   "dependencies": {
     "@types/ramda": "0.27.40",
@@ -26,6 +26,7 @@
     "@typescript-eslint/eslint-plugin": "4.24.0",
     "@typescript-eslint/eslint-plugin-tslint": "4.24.0",
     "@typescript-eslint/parser": "4.24.0",
+    "clean-webpack-plugin": "4.0.0-alpha.0",
     "delete-empty": "3.0.0",
     "gulp": "4.0.2",
     "gulp-clean": "0.4.0",
@@ -33,8 +34,12 @@
     "gulp-sourcemaps": "3.0.0",
     "gulp-typescript": "6.0.0-alpha.1",
     "npm-run-all": "^4.1.5",
+    "ts-loader": "9.2.2",
     "ts-node": "10.0.0",
     "tslib": "2.2.0",
-    "typescript": "4.1.5"
+    "typescript": "4.1.5",
+    "webpack": "5.38.1",
+    "webpack-cli": "4.7.0",
+    "webpack-dev-server": "3.11.2"
   }
 }
