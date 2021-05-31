@@ -3,6 +3,7 @@ import { identity } from "./identity";
 export function pipe(){
   
 }
+console.log(231);
 export function pipeFromArray<T, R>(operations: UnaryFunction<T, R>[]) :UnaryFunction<T, R> {
   if (operations.length === 0) {
     return identity  as UnaryFunction<any, any>;
