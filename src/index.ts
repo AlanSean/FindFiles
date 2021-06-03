@@ -1,15 +1,11 @@
 import * as fs from 'fs-extra';
 import * as path from 'path';
-import { pipeFromArray } from './util/pipe';
-import { UnaryFunction } from './types';
-import { isFile, fileCheck, isDirectory } from './check';
-
-// const subject = new Subject();
+import { UnaryFunction, ZeroFunction } from './types';
+import { fileCheck, isDirectory } from './check';
+import { getFilePath, pipeFromArray } from './util/index';
 
 export class FindFiles<T = string> {
-  condition?: RegExp;
-  factorys: UnaryFunction<string, T>[] = [];
-  check: UnaryFunction<string, undefined | string>;
+  protected check: UnaryFunction<string, undefined | string>;
   constructor(condition?: RegExp) {
     this.check = fileCheck(condition);
   }
@@ -30,42 +26,52 @@ export class FindFiles<T = string> {
 }
 
 class AnonymousFiles<T = string> extends FindFiles<T> {
-  protected arr: T[] = [];
+  factorys: UnaryFunction<string, T>[] = [];
+  private arr: T[] = [];
+  private sendPath = getFilePath(this.check, this.next);
+  private isClose = false;
+  private observers: UnaryFunction<T, void>[] = [];
   constructor() {
     super();
   }
-  protected recursive(fileName?: string) {
+  private recursive(fileName?: string) {
     if (!fileName || !fs.existsSync(fileName)) return;
 
-    const { check } = this;
-
-    this.next(check(fileName));
+    this.sendPath(fileName);
 
     if (isDirectory(fileName)) {
-
       const files = fs.readdirSync(fileName);
-
       for (let val of files) {
-
         const filepath = path.resolve(fileName, val).replace(/\\/, '/');
-        this.next(check(filepath));
+        this.sendPath(filepath);
         this.recursive(isDirectory(filepath));
-        
       }
     }
   }
 
-  protected factory(fileName: string): T {
+  private factory(fileName: string) {
     const factorys = [...this.factorys];
     return pipeFromArray<string, T>(factorys)(fileName);
   }
-  subscribe(){
-
+  subscribe(subscribe: UnaryFunction<T, void>) {
+    this.isClose = true;
+    this.observers.push(subscribe);
+    return {
+      unsubscribe: () => {
+        this.isClose = false;
+      },
+    };
   }
-  next(fileName?: string) {
-    if(!fileName) return;
+  next(fileName: string) {
     const arr = this.arr;
-    arr[arr.length] = this.factory(fileName);
+    const result = this.factory(fileName);
+    arr[arr.length] = result;
+    if (this.isClose) {
+      const copy = this.observers.slice();
+      for (const observer of copy) {
+        observer(result);
+      }
+    }
   }
 
   find(dirPath: string | string[]) {
