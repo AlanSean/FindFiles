@@ -1,13 +1,13 @@
 import * as fs from 'fs-extra';
 import * as path from 'path';
 import { UnaryFunction, ZeroFunction } from './types';
-import { fileCheck, isDirectory } from './check';
+import { searchFile } from './check';
 import { getFilePath, pipeFromArray } from './util/index';
 
 export class FindFiles<T = string> {
-  protected check: UnaryFunction<string, undefined | string>;
+  protected condition?: RegExp;
   constructor(condition?: RegExp) {
-    this.check = fileCheck(condition);
+    this.condition = condition;
   }
 
   static create<S = string>(factorys: UnaryFunction<string, S>[]) {
@@ -28,24 +28,18 @@ export class FindFiles<T = string> {
 class AnonymousFiles<T = string> extends FindFiles<T> {
   factorys: UnaryFunction<string, T>[] = [];
   private arr: T[] = [];
-  private sendPath = getFilePath(this.check, this.next);
+  private searchRule: UnaryFunction<string, void>;
   private isClose = false;
   private observers: UnaryFunction<T, void>[] = [];
-  constructor() {
+  constructor(condition?: RegExp) {
     super();
+    this.searchRule = searchFile(condition)(this.dirPipe, this.next);
   }
-  private recursive(fileName?: string) {
-    if (!fileName || !fs.existsSync(fileName)) return;
-
-    this.sendPath(fileName);
-
-    if (isDirectory(fileName)) {
-      const files = fs.readdirSync(fileName);
-      for (let val of files) {
-        const filepath = path.resolve(fileName, val).replace(/\\/, '/');
-        this.sendPath(filepath);
-        this.recursive(isDirectory(filepath));
-      }
+  private dirPipe(path: string) {
+    const files = fs.readdirSync(path);
+    for (let val of files) {
+      const filepath = `${path}/${val}`.replace(/\\/, '/');
+      this.searchRule(filepath);
     }
   }
 
@@ -75,13 +69,14 @@ class AnonymousFiles<T = string> extends FindFiles<T> {
   }
 
   find(dirPath: string | string[]) {
+    const searchRule = this.searchRule;
     if (Object.prototype.toString.call(dirPath) === '[object Array]') {
       for (let path of dirPath) {
-        this.recursive(path);
+        searchRule(path);
       }
     }
     if (typeof dirPath === 'string') {
-      this.recursive(dirPath);
+      searchRule(dirPath);
     }
 
     return this.arr;

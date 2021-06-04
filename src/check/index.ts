@@ -1,67 +1,80 @@
-import { Maybe } from '../class/index';
 import * as fs from 'fs-extra';
-import * as _ from 'ramda';
-import { UnaryFunction, ZeroFunction } from '../types';
-import { identity, compose } from '../util';
+import { Maybe, Either } from '../class/index';
+import { UnaryFunction } from '../types';
+import { compose } from '../util';
+import { entrance } from './entrance';
 // import { UnaryFunction } from '../types';
 
 //-----> fs.existsSync -> statSync -> isFile  -> check
 //----->  true ----------> stat-----> false -> isDirectory -> recursive
 //------------------------------------------->   false ->  isFile  -> check
-
-function entrance(fileName: string) {
-  return Maybe.of(fileName);
-}
-function existsSync(fileName: Maybe<string>): Maybe<null | string> {
-  const val = fileName.__value;
-  return fs.existsSync(val) ? fileName : Maybe.of(null);
-}
-function statSync(files: Maybe<null | string>): Maybe<null | fs.Stats> {
-  const val = files.__value;
-
-  return files.isNothing()
-    ? Maybe.of<null>(null)
-    : Maybe.of<fs.Stats>(fs.statSync(val));
-}
-function isDirectory(files: Maybe<fs.Stats>) {
-  const val = files.__value;
-
-  return files.isNothing() ? Maybe.of(null) : Maybe.of(val.isDirectory());
-}
-const maybe = function (f: UnaryFunction<fs.Stats | null, fs.Stats | null>) {
-  return function (m: Maybe<fs.Stats | null>) {
-    return m.isNothing() ? m : f(m.__value);
-  };
-};
-// maybe(identity)
-var stats = compose(statSync, existsSync);
-var flat = compose(console.log, maybe(identity));
-var entry = compose(stats,entrance);
-
-var result = compose(flat,entry);
-
-result('E:/github/FindFile')
-
-// export function isDirectory(fileName: string) {
-//   if (existsSync(fileName) && fs.statSync(fileName).isDirectory()) return fileName;
-//   return undefined;
+// var getPath = function(){
+//   IO.of();
 // }
 
-export function isFile(fileName: string) {
-  if (fs.existsSync(fileName) && fs.statSync(fileName).isFile())
-    return fileName;
-  return undefined;
+function existsSync(m: Maybe<string>) {
+  const val = m.__value;
+  return fs.existsSync(val) ? m : Either.of<null>(null);
 }
-export function check(fileName?: string, condition?: RegExp) {
-  const result =
-    condition == undefined || fileName == undefined || condition.test(fileName);
-  return result ? fileName : undefined;
-}
-
-export function checkRule(condition?: RegExp) {
-  return (fileName: string) => check(isFile(fileName), condition);
+function fileCheck(condition?: RegExp) {
+  return function (m: Maybe<string>) {
+    return !condition || condition.test(m.__value) ? m : Either.of<null>(null);
+  };
 }
 
-export function fileCheck(condition?: RegExp) {
-  return checkRule(condition);
+function maybe(f: UnaryFunction<string, void>) {
+  return function (m: Maybe<string>) {
+    return f(m.__value);
+  };
+}
+function fileTypeMaybe(
+  left: UnaryFunction<Maybe<string>, void>,
+  right: UnaryFunction<Maybe<string>, void>
+) {
+  return function (path: Maybe<string>) {
+    const val = path.__value;
+    try {
+      const stat = fs.statSync(val);
+
+      if (stat.isDirectory()) {
+        return left(path);
+      }
+      if (stat.isFile()) {
+        return right(path);
+      }
+      return Either.of<any>('Not files and folders');
+    } catch (error) {
+      return Either.of<any>(error);
+    }
+  };
+}
+
+function either<T>(
+  left: UnaryFunction<Either<any>, void>,
+  right: UnaryFunction<Maybe<T>, void>
+) {
+  return function (m: Either<any> | Maybe<T>) {
+    if (m.constructor === Either) {
+      return left(m);
+    }
+    if (m.constructor === Maybe) {
+      return right(m);
+    }
+  };
+}
+
+// maybe(identity)
+
+export function searchFile(condition?: RegExp) {
+  return function (
+    dirPipe: UnaryFunction<string, void>,
+    filePipe: UnaryFunction<string, void>
+  ) {
+    const log = (error: Either<any>) => console.log('error:', error.__value);
+    const entry = compose(existsSync, entrance);
+    const check = compose(either(log, maybe(filePipe)), fileCheck(condition));
+    const dirOrFilePipe = fileTypeMaybe(maybe(dirPipe), check);
+    const result = compose(either(log, dirOrFilePipe), entry);
+    return result;
+  };
 }
