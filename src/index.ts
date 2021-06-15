@@ -1,8 +1,7 @@
 import * as fs from 'fs-extra';
-import * as path from 'path';
-import { UnaryFunction, ZeroFunction } from './types';
+import { UnaryFunction } from './types';
 import { searchFile } from './check';
-import { getFilePath, pipeFromArray } from './util/index';
+import { pipeFromArray } from './util/index';
 
 export class FindFiles<T = string> {
   protected condition?: RegExp;

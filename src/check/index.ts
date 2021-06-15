@@ -3,19 +3,12 @@ import { Maybe, Either } from '../class/index';
 import { UnaryFunction } from '../types';
 import { compose } from '../util';
 import { entrance } from './entrance';
-// import { UnaryFunction } from '../types';
-
-//-----> fs.existsSync -> statSync -> isFile  -> check
-//----->  true ----------> stat-----> false -> isDirectory -> recursive
-//------------------------------------------->   false ->  isFile  -> check
-// var getPath = function(){
-//   IO.of();
-// }
 
 function existsSync(m: Maybe<string>) {
   const val = m.__value;
   return fs.existsSync(val) ? m : Either.of<null>(null);
 }
+
 function fileCheck(condition?: RegExp) {
   return function (m: Maybe<string>) {
     return !condition || condition.test(m.__value) ? m : Either.of<null>(null);
@@ -27,6 +20,7 @@ function maybe(f: UnaryFunction<string, void>) {
     return f(m.__value);
   };
 }
+
 function fileTypeMaybe(
   left: UnaryFunction<Maybe<string>, void>,
   right: UnaryFunction<Maybe<string>, void>
@@ -63,7 +57,6 @@ function either<T>(
   };
 }
 
-// maybe(identity)
 
 export function searchFile(condition?: RegExp) {
   return function (

@@ -1,14 +1,8 @@
 import { ZeroFunction, UnaryFunction } from '../types';
 import * as _ from 'ramda';
+import { compose } from '../util';
 
-function compose<T, R>(
-  a: UnaryFunction<T, R>,
-  b: ZeroFunction<T> | UnaryFunction<T, T>
-) {
-  return function (args?: T) {
-    return a(b(args));
-  };
-}
+
 export class IO<T> {
   unsafePerformIO: ZeroFunction<T>;
   constructor(fn: ZeroFunction<T>) {
