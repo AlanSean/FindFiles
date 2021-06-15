@@ -2,6 +2,14 @@
   "name": "node-find-file",
   "version": "1.0.0",
   "description": "find file",
+  "homepage": "https://github.com/AlanSean/FindFiles",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AlanSean/FindFiles.git"
+  },
+  "bugs": {
+    "url": "https://github.com/AlanSean/FindFiles/issues"
+  },
   "scripts": {
     "dev": "ts-node-dev --watch --inspect=3000 --   ./server/index.ts",
     "build": "gulp copy && gulp build --dist node_modules/node-find-file",
