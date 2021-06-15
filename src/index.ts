@@ -23,8 +23,35 @@ export class FindFiles<T = string> {
     findFiles.factorys = factorys;
     return findFiles;
   }
-
-  public pipe<R>(...operations: UnaryFunction<string, R>[]) {
+  public pipe(): FindFiles<string>;
+  public pipe<T1, R>(
+    fn0: UnaryFunction<string, T1>,
+    fn1: UnaryFunction<T1, R>
+  ): FindFiles<R>;
+  public pipe<T1, T2, T3, R>(
+    fn0: UnaryFunction<string, T1>,
+    fn1: UnaryFunction<T1, T2>,
+    fn2: UnaryFunction<T2, T3>,
+    fn3: UnaryFunction<T3, R>
+  ): FindFiles<R>;
+  public pipe<T1, T2, T3, T4, R>(
+    fn0: UnaryFunction<string, T1>,
+    fn1: UnaryFunction<T1, T2>,
+    fn2: UnaryFunction<T2, T3>,
+    fn3: UnaryFunction<T3, T4>,
+    fn4: UnaryFunction<T4, R>
+  ): FindFiles<R>;
+  public pipe<T1, T2, T3, T4, R>(
+    fn0: UnaryFunction<string, T1>,
+    fn1: UnaryFunction<T1, T2>,
+    fn2: UnaryFunction<T2, T3>,
+    fn3: UnaryFunction<T3, T4>,
+    fn4: UnaryFunction<T4, R>,
+    ...operations: UnaryFunction<any, any>[]
+  ): FindFiles<R>;
+  public pipe<R = any>(
+    ...operations: UnaryFunction<any, any>[]
+  ): FindFiles<any> {
     const findFiles = FindFiles.create<R>(this.condition, operations);
     // findFiles.closed = this.closed;
     // findFiles.observers = [...this.observers];
@@ -53,7 +80,7 @@ export class FindFiles<T = string> {
       this.searchRule(filepath);
     }
   };
-
+  
   private factory(fileName: string) {
     const factorys = [...this.factorys];
     return pipeFromArray<string, T>(factorys)(fileName);

@@ -1,7 +1,7 @@
 {
   "name": "findfile",
   "version": "1.0.0",
-  "description": "",
+  "description": "find file",
   "scripts": {
     "dev": "ts-node-dev --watch --inspect=3000 --   ./server/index.ts",
     "build": "gulp build --dist node_modules/findFile",
