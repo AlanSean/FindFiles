@@ -1,15 +1,15 @@
 {
-  "name": "find-file",
+  "name": "node-find-file",
   "version": "1.0.0",
   "description": "find file",
   "scripts": {
     "dev": "ts-node-dev --watch --inspect=3000 --   ./server/index.ts",
-    "build": "gulp copy && gulp build --dist node_modules/find-file",
+    "build": "gulp copy && gulp build --dist node_modules/node-find-file",
     "clean": "gulp clean:bundle",
     "test": "npm run build && ts-node ./test/index.ts",
     "test:dev": " ts-node ./test/index.ts",
-    "prerelease": "gulp copy && gulp build --dist node_modules/find-file",
-    "publish": "npm publish ./node_modules/find-file"
+    "prerelease": "gulp copy && gulp build --dist node_modules/node-find-file",
+    "publish": "npm publish ./node_modules/node-find-file --force-publish --access public"
   },
   "author": "AlanSean",
   "main": "./index.js",
