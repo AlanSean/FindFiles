@@ -1,5 +1,5 @@
 import * as path from "path";
-import { FindFiles } from '../src/index';
+import { FindFiles } from 'findFile';
 
 const findFiles = new FindFiles(/\.(jpg|jpeg|webp|png)$/i);
 
