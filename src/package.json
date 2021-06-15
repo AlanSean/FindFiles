@@ -1,0 +1,15 @@
+{
+  "name": "node-find-file",
+  "version": "1.0.0",
+  "description": "Node - find files",
+  "main": "index.js",
+  "author": "AlanSean",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AlanSean/FindFiles"
+  },
+  "dependencies": {
+    "fs-extra": "10.0.0"
+  }
+}

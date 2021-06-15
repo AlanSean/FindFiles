@@ -1,0 +1,6 @@
+export interface ZeroFunction<T> {
+  (): T;
+}
+export interface UnaryFunction<T, R> {
+  (x0: T): R;
+}
