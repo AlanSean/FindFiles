@@ -1,5 +1,5 @@
 {
-  "name": "findfiles",
+  "name": "find-file",
   "version": "1.0.0",
   "description": "Node - find files",
   "main": "index.js",
