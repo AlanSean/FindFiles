@@ -5,79 +5,82 @@ import { pipeFromArray } from './util/index';
 
 export class FindFiles<T = string> {
   protected condition?: RegExp;
+  private arr: T[] = [];
+  private searchRule: UnaryFunction<string, void>;
+  private closed = false;
+  private factorys: UnaryFunction<string, T>[] = [];
+  private observers: UnaryFunction<any, void>[] = [];
   constructor(condition?: RegExp) {
     this.condition = condition;
+    this.searchRule = searchFile(this.condition)(this.dirPipe, this.next);
   }
 
-  static create<S = string>(factorys: UnaryFunction<string, S>[]) {
-    const findFiles = new AnonymousFiles<S>();
+  static create<S = string>(
+    condition: RegExp | undefined,
+    factorys: UnaryFunction<string, S>[]
+  ) {
+    const findFiles = new FindFiles<S>(condition);
     findFiles.factorys = factorys;
     return findFiles;
   }
 
-  pipe<R>(...operations: UnaryFunction<string, R>[]) {
-    return FindFiles.create<R>(operations);
+  public pipe<R>(...operations: UnaryFunction<string, R>[]) {
+    const findFiles = FindFiles.create<R>(this.condition, operations);
+    // findFiles.closed = this.closed;
+    // findFiles.observers = [...this.observers];
+    return findFiles;
   }
 
-  find(dirPath: string | string[]) {
-    return new AnonymousFiles<T>().find(dirPath);
+  public find(dirPath: string | string[]) {
+    return this.runFind(dirPath);
   }
-}
 
-class AnonymousFiles<T = string> extends FindFiles<T> {
-  factorys: UnaryFunction<string, T>[] = [];
-  private arr: T[] = [];
-  private searchRule: UnaryFunction<string, void>;
-  private isClose = false;
-  private observers: UnaryFunction<T, void>[] = [];
-  constructor(condition?: RegExp) {
-    super();
-    this.searchRule = searchFile(condition)(this.dirPipe, this.next);
+  public subscribe(subscribe: UnaryFunction<any, void>) {
+    this.closed = true;
+    this.observers.push((result: string) => subscribe(this.factory(result)));
+    return {
+      unsubscribe: this.unsubscribe,
+    };
   }
-  private dirPipe(path: string) {
+  unsubscribe(): void {
+    this.closed = false;
+    this.observers = [];
+  }
+  private dirPipe = (path: string) => {
     const files = fs.readdirSync(path);
     for (let val of files) {
       const filepath = `${path}/${val}`.replace(/\\/, '/');
       this.searchRule(filepath);
     }
-  }
+  };
 
   private factory(fileName: string) {
     const factorys = [...this.factorys];
     return pipeFromArray<string, T>(factorys)(fileName);
   }
-  subscribe(subscribe: UnaryFunction<T, void>) {
-    this.isClose = true;
-    this.observers.push(subscribe);
-    return {
-      unsubscribe: () => {
-        this.isClose = false;
-      },
-    };
-  }
-  next(fileName: string) {
+
+  private next = (fileName: string) => {
     const arr = this.arr;
     const result = this.factory(fileName);
     arr[arr.length] = result;
-    if (this.isClose) {
+    if (this.closed) {
       const copy = this.observers.slice();
       for (const observer of copy) {
-        observer(result);
+        observer(fileName);
       }
     }
-  }
+  };
 
-  find(dirPath: string | string[]) {
-    const searchRule = this.searchRule;
+  private runFind(dirPath: string | string[]) {
+    this.arr = [];
     if (Object.prototype.toString.call(dirPath) === '[object Array]') {
       for (let path of dirPath) {
-        searchRule(path);
+        this.searchRule(path);
       }
     }
     if (typeof dirPath === 'string') {
-      searchRule(dirPath);
+      this.searchRule(dirPath);
     }
-
     return this.arr;
   }
 }

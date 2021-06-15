@@ -57,7 +57,6 @@ function either<T>(
   };
 }
 
-
 export function searchFile(condition?: RegExp) {
   return function (
     dirPipe: UnaryFunction<string, void>,

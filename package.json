@@ -6,7 +6,8 @@
     "dev": "ts-node-dev --watch --inspect=3000 --   ./server/index.ts",
     "build": "gulp build --dist node_modules/findFile",
     "clean": "gulp clean:bundle",
-    "test": "npm run build && ts-node ./test/index.ts"
+    "test": "npm run build && ts-node ./test/index.ts",
+    "test:dev": " ts-node ./test/index.ts"
   },
   "author": "AlanSean",
   "main": "./index.js",
