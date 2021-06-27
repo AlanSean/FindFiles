@@ -24,6 +24,9 @@ export class FindFiles<T = string> {
     return findFiles;
   }
   public pipe(): FindFiles<string>;
+  public pipe<R>(
+    fn0: UnaryFunction<string, R>
+  ): FindFiles<R>;
   public pipe<T1, R>(
     fn0: UnaryFunction<string, T1>,
     fn1: UnaryFunction<T1, R>
