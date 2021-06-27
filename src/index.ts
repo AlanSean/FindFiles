@@ -24,6 +24,9 @@ export class FindFiles<T = string> {
     return findFiles;
   }
   public pipe(): FindFiles<string>;
+  public pipe<R>(
+    fn0: UnaryFunction<string, R>
+  ): FindFiles<R>;
   public pipe<T1, R>(
     fn0: UnaryFunction<string, T1>,
     fn1: UnaryFunction<T1, R>
@@ -64,7 +67,7 @@ export class FindFiles<T = string> {
 
   public subscribe(subscribe: UnaryFunction<any, void>) {
     this.closed = true;
-    this.observers.push((result: string) => subscribe(this.factory(result)));
+    this.observers.push((result: string) => subscribe(result));
     return {
       unsubscribe: this.unsubscribe,
     };
@@ -93,7 +96,7 @@ export class FindFiles<T = string> {
     if (this.closed) {
       const copy = this.observers.slice();
       for (const observer of copy) {
-        observer(fileName);
+        observer(result);
       }
     }
   };

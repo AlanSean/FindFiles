@@ -1,6 +1,6 @@
 {
-  "name": "node-find-file",
-  "version": "1.0.3",
+  "name": "@etan/node-find-files",
+  "version": "1.0.0",
   "description": "find file",
   "homepage": "https://github.com/AlanSean/FindFiles",
   "repository": {
