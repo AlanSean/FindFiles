@@ -1,8 +1,11 @@
 {
-  "name": "@etan/node-find-files",
+  "name": "@etanjs/node-find-files",
   "version": "1.0.0",
   "description": "find file",
   "homepage": "https://github.com/AlanSean/FindFiles",
+  "publishConfig": {
+    "access": "public"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/AlanSean/FindFiles.git"
@@ -17,7 +20,7 @@
     "test": "npm run build && ts-node ./test/index.ts",
     "test:dev": " ts-node ./test/index.ts",
     "prerelease": "gulp build",
-    "publish": "npm publish  --force-publish --access public"
+    "publish": "npm publish  --access=public"
   },
   "author": "AlanSean",
   "main": "./dist/index.js",

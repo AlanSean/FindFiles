@@ -12,3 +12,5 @@ gulp/
 sample/
 serve/
 test/
+src/
+node_modules/
