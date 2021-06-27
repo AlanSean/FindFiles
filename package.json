@@ -1,6 +1,6 @@
 {
   "name": "node-find-file",
-  "version": "1.0.1",
+  "version": "1.0.3",
   "description": "find file",
   "homepage": "https://github.com/AlanSean/FindFiles",
   "repository": {
@@ -12,15 +12,15 @@
   },
   "scripts": {
     "dev": "ts-node-dev --watch --inspect=3000 --   ./server/index.ts",
-    "build": "gulp copy && gulp build --dist node_modules/node-find-file",
+    "build": "gulp build",
     "clean": "gulp clean:bundle",
     "test": "npm run build && ts-node ./test/index.ts",
     "test:dev": " ts-node ./test/index.ts",
-    "prerelease": "gulp copy && gulp build --dist node_modules/node-find-file",
-    "publish": "npm publish ./node_modules/node-find-file --force-publish --access public"
+    "prerelease": "gulp build",
+    "publish": "npm publish  --force-publish --access public"
   },
   "author": "AlanSean",
-  "main": "./index.js",
+  "main": "./dist/index.js",
   "license": "ISC",
   "dependencies": {
     "fs-extra": "10.0.0"
