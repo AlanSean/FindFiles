@@ -1,5 +1,5 @@
 import * as path from "path";
-import { FindFiles } from 'node-find-file';
+import { FindFiles } from '@etanjs/node-find-files';
 
 const findFiles = new FindFiles(/\.(jpg|jpeg|webp|png)$/i);
 

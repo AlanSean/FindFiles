@@ -1,12 +1,12 @@
-# node-find-file
-node node-find-file
+# @etanjs/node-find-files
+node @etanjs/node-find-files
 
 
 ## install
 ```
-npm install node-find-file
+npm install @etanjs/node-find-files
 or
-yarn add node-find-file
+yarn add @etanjs/node-find-files
 ```
 
 
@@ -51,7 +51,7 @@ public pipe<T1, T2, T3, T4, R>(
 
 
 import * as path from "path";
-import { FindFiles } from 'node-find-file';
+import { FindFiles } from '@etanjs/node-find-files';
 const findFiles = new FindFiles(/\.(jpg|jpeg|webp|png)$/i);
 // path => {a: path}
 const pipe0 = findFiles.pipe(a => ({a:a}));
@@ -72,7 +72,7 @@ subscribe = (x0) : void;
 
 
 import * as path from "path";
-import { FindFiles } from 'node-find-file';
+import { FindFiles } from '@etanjs/node-find-files';
 
 const findFiles = new FindFiles(/\.(jpg|jpeg|webp|png)$/i);
 findFiles.subscribe(console.log);
@@ -84,7 +84,7 @@ const files = findFiles.find(path.resolve(__dirname,'./img'));
 
 ```
 import * as path from "path";
-import { FindFiles } from 'node-find-file';
+import { FindFiles } from '@etanjs/node-find-files';
 
 const findFiles = new FindFiles(/\.(jpg|jpeg|webp|png)$/i);
 
