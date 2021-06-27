@@ -64,7 +64,7 @@ export class FindFiles<T = string> {
 
   public subscribe(subscribe: UnaryFunction<any, void>) {
     this.closed = true;
-    this.observers.push((result: string) => subscribe(this.factory(result)));
+    this.observers.push((result: string) => subscribe(result));
     return {
       unsubscribe: this.unsubscribe,
     };
@@ -93,7 +93,7 @@ export class FindFiles<T = string> {
     if (this.closed) {
       const copy = this.observers.slice();
       for (const observer of copy) {
-        observer(fileName);
+        observer(result);
       }
     }
   };
