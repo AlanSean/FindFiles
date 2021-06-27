@@ -12,7 +12,7 @@
   },
   "scripts": {
     "dev": "ts-node-dev --watch --inspect=3000 --   ./server/index.ts",
-    "build": "gulp build",
+    "build": "gulp copy  --dist ./node_modules/node-find-file && gulp build --dist ./node_modules/node-find-file",
     "clean": "gulp clean:bundle",
     "test": "npm run build && ts-node ./test/index.ts",
     "test:dev": " ts-node ./test/index.ts",
