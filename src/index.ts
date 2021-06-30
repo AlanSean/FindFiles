@@ -65,9 +65,9 @@ export class FindFiles<T = string> {
     return this.runFind(dirPath);
   }
 
-  public subscribe(subscribe: UnaryFunction<any, void>) {
+  public subscribe(subscribe: UnaryFunction<T, void>) {
     this.closed = true;
-    this.observers.push((result: string) => subscribe(result));
+    this.observers.push((result: T) => subscribe(result));
     return {
       unsubscribe: this.unsubscribe,
     };
