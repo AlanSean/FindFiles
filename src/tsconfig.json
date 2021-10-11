@@ -17,7 +17,7 @@
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "downlevelIteration": true,
-    "importHelpers": true,
+    "importHelpers": false,
     "sourceMap": true,
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
