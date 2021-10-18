@@ -1,6 +1,6 @@
 {
   "name": "@etanjs/node-find-files",
-  "version": "1.0.4",
+  "version": "1.0.6",
   "description": "find file",
   "homepage": "https://github.com/AlanSean/FindFiles",
   "publishConfig": {
@@ -15,12 +15,12 @@
   },
   "scripts": {
     "dev": "ts-node-dev --watch --inspect=3000 --   ./server/index.ts",
-    "build": "gulp copy  --dist ./node_modules/@etanjs/node-find-files && gulp build --dist ./node_modules/@etanjs/node-find-files",
+    "build": "gulp copy  && gulp build ",
     "clean": "gulp clean:bundle",
     "test": "npm run build && ts-node ./test/index.ts",
     "test:dev": " ts-node ./test/index.ts",
     "prerelease": "gulp build",
-    "publish": "npm publish ./node_modules/@etanjs/node-find-files  --access=public"
+    "publish": "npm publish  --access=public"
   },
   "author": "AlanSean",
   "main": "index.js",
