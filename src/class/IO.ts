@@ -1,5 +1,4 @@
 import { ZeroFunction, UnaryFunction } from '../types';
-import * as _ from 'ramda';
 import { compose } from '../util';
 
 

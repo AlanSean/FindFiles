@@ -24,9 +24,7 @@ export class FindFiles<T = string> {
     return findFiles;
   }
   public pipe(): FindFiles<string>;
-  public pipe<R>(
-    fn0: UnaryFunction<string, R>
-  ): FindFiles<R>;
+  public pipe<R>(fn0: UnaryFunction<string, R>): FindFiles<R>;
   public pipe<T1, R>(
     fn0: UnaryFunction<string, T1>,
     fn1: UnaryFunction<T1, R>
@@ -79,11 +77,10 @@ export class FindFiles<T = string> {
   private dirPipe = (path: string) => {
     const files = fs.readdirSync(path);
     for (let val of files) {
-      const filepath = `${path}/${val}`.replace(/\\/, '/');
-      this.searchRule(filepath);
+      this.searchRule(`${path}/${val}`);
     }
   };
-  
+
   private factory(fileName: string) {
     const factorys = [...this.factorys];
     return pipeFromArray<string, T>(factorys)(fileName);

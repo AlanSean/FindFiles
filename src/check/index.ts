@@ -1,7 +1,7 @@
 import * as fs from 'fs-extra';
 import { Maybe, Either } from '../class/index';
 import { UnaryFunction } from '../types';
-import { compose } from '../util';
+import { compose, identity } from '../util';
 import { entrance } from './entrance';
 
 function existsSync(m: Maybe<string>) {
@@ -64,7 +64,7 @@ export function searchFile(condition?: RegExp) {
   ) {
     const log = (error: Either<any>) => console.log('error:', error.__value);
     const entry = compose(existsSync, entrance);
-    const check = compose(either(log, maybe(filePipe)), fileCheck(condition));
+    const check = compose(either(identity, maybe(filePipe)), fileCheck(condition));
     const dirOrFilePipe = fileTypeMaybe(maybe(dirPipe), check);
     const result = compose(either(log, dirOrFilePipe), entry);
     return result;

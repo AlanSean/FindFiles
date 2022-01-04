@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "outDir": "dist",
+    "declaration": true,
+    "module": "commonjs",
+    "target": "esnext",
+    "skipLibCheck": true,
+    "sourceMap": false,
+    "strict": true
+  },
+  "include": ["src"],
+  "exclude": ["node_modules", "e2e"]
+}
