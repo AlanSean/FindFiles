@@ -15,15 +15,12 @@
   },
   "scripts": {
     "dev": "ts-node-dev --watch --inspect=3000 --   ./server/index.ts",
-    "build": "gulp copy  && gulp build ",
-    "clean": "gulp clean:bundle",
-    "test": "npm run build && ts-node ./test/index.ts",
-    "test:dev": " ts-node ./test/index.ts",
-    "prerelease": "gulp build",
+    "build": "tsc",
+    "test": "ts-node ./test/index.ts",
     "publish": "npm publish  --access=public"
   },
   "author": "AlanSean",
-  "main": "index.js",
+  "main": "dist/index.js",
   "license": "ISC",
   "dependencies": {
     "fs-extra": "10.0.0"
