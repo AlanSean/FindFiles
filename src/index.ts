@@ -1,4 +1,3 @@
-import { resolve as PathResolve, join as PathJoin } from 'path';
 import * as fs from 'fs-extra';
 import { UnaryFunction } from './types';
 import { searchFile } from './check';
@@ -78,13 +77,7 @@ export class FindFiles<T = string> {
   private dirPipe = (path: string) => {
     const files = fs.readdirSync(path);
     for (let val of files) {
-      let filepath = PathJoin(path, val);
-
-      if (process.platform === 'win32') {
-        filepath = filepath.replace(/\\/g, '/');
-      }
-
-      this.searchRule(filepath);
+      this.searchRule(`${path}/${val}`);
     }
   };
 
@@ -109,11 +102,11 @@ export class FindFiles<T = string> {
     this.arr = [];
     if (Object.prototype.toString.call(dirPath) === '[object Array]') {
       for (let path of dirPath) {
-        this.searchRule(PathResolve(path));
+        this.searchRule(path);
       }
     }
     if (typeof dirPath === 'string') {
-      this.searchRule(PathResolve(dirPath));
+      this.searchRule(dirPath);
     }
     return this.arr;
   }

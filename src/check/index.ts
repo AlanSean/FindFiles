@@ -64,10 +64,7 @@ export function searchFile(condition?: RegExp) {
   ) {
     const log = (error: Either<any>) => console.log('error:', error.__value);
     const entry = compose(existsSync, entrance);
-    const check = compose(
-      either(identity, maybe(filePipe)),
-      fileCheck(condition)
-    );
+    const check = compose(either(identity, maybe(filePipe)), fileCheck(condition));
     const dirOrFilePipe = fileTypeMaybe(maybe(dirPipe), check);
     const result = compose(either(log, dirOrFilePipe), entry);
     return result;
