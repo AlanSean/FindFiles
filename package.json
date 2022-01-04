@@ -1,6 +1,6 @@
 {
   "name": "@etanjs/node-find-files",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "find file",
   "homepage": "https://github.com/AlanSean/FindFiles",
   "publishConfig": {

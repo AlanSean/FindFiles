@@ -1,3 +1,4 @@
+import { resolve as PathResolve, join as PathJoin } from 'path';
 import * as fs from 'fs-extra';
 import { UnaryFunction } from './types';
 import { searchFile } from './check';
@@ -24,9 +25,7 @@ export class FindFiles<T = string> {
     return findFiles;
   }
   public pipe(): FindFiles<string>;
-  public pipe<R>(
-    fn0: UnaryFunction<string, R>
-  ): FindFiles<R>;
+  public pipe<R>(fn0: UnaryFunction<string, R>): FindFiles<R>;
   public pipe<T1, R>(
     fn0: UnaryFunction<string, T1>,
     fn1: UnaryFunction<T1, R>
@@ -79,11 +78,16 @@ export class FindFiles<T = string> {
   private dirPipe = (path: string) => {
     const files = fs.readdirSync(path);
     for (let val of files) {
-      const filepath = `${path}/${val}`.replace(/\\/, '/');
+      let filepath = PathJoin(path, val);
+
+      if (process.platform === 'win32') {
+        filepath = filepath.replace(/\\/g, '/');
+      }
+
       this.searchRule(filepath);
     }
   };
-  
+
   private factory(fileName: string) {
     const factorys = [...this.factorys];
     return pipeFromArray<string, T>(factorys)(fileName);
@@ -105,11 +109,11 @@ export class FindFiles<T = string> {
     this.arr = [];
     if (Object.prototype.toString.call(dirPath) === '[object Array]') {
       for (let path of dirPath) {
-        this.searchRule(path);
+        this.searchRule(PathResolve(path));
       }
     }
     if (typeof dirPath === 'string') {
-      this.searchRule(dirPath);
+      this.searchRule(PathResolve(dirPath));
     }
     return this.arr;
   }
